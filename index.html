@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hype Typer</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-900 text-white">
+
+    <main class="min-h-screen p-4">
+        <div class="mx-auto max-w-6xl">
+
+            <header class="mb-5 border border-slate-700 bg-slate-800 p-4">
+                <h1 class="text-4xl font-black uppercase tracking-wide">Hype Typer</h1>
+                <p class="mt-2 text-sm text-slate-400">Arcade Typing Challenge</p>
+            </header>
+
+            <section class="grid gap-4 lg:grid-cols-[1fr_280px]">
+                            
+                <section class="border border-slate-700 bg-slate-800">
+
+                    <div class="border-b border-slate-700 p-3">
+                        <h2 class="font-bold uppercase tracking-wide">Game Window</h2>
+                    </div>
+
+                    <div id="playField" class="h-[480px] bg-slate-950"></div>
+                
+                </section>
+
+                <aside class="space-y-4">
+
+                    <section class="border border-slate-700 bg-slate-800 p-4">
+                        <h3 class="mb-2 font-bold uppercase">Stats</h3>
+                        <p class="text-sm text-slate-400">Score</p>
+                    </section>
+
+                    <section class="border border-slate-700 bg-slate-800 p-4">
+                        
+                        <h3 class="mb-2 font-bold uppercase">Controls</h3>
+                        <ul class="space-y-1 text-sm text-slate-400">
+                            
+                            <li>Type words to clear them.</li>
+                            <li>TAB will become the power key.</li>
+
+                        </ul>
+
+                    </section>
+
+                    <section class="border border-slate-700 bg-slate-800 p-4">
+                        <h3 class="mb-2 font-bold uppercase">Events</h3>
+                        <p id="eventLog" class="text-sm text-slate-400">Lesss Go</p>
+                    </section>
+
+                </aside>
+
+            </section>
+
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
