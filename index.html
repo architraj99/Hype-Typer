@@ -18,29 +18,62 @@
                 <p class="mt-2 text-sm text-slate-400">Arcade Typing Challenge</p>
             </header>
 
+            <section class="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+               
+                <article class="stat-card">
+                    
+                    <p class="stat-label">Score</p>
+                    <p id="scoreDisplay" class="stat-value text-emerald-500">0</p>
+                </article>
+
+                <article class="stat-card">
+                    <p class="stat-label">Shield</p>
+                    <p id="shieldDisplay" class="stat-value">100%</p>
+                </article>
+
+                <article class="stat-card">
+                    <p class="stat-label">Streak</p>
+                    <p id="streakDisplay" class="stat-value">0</p>
+                </article>
+
+                <article class="stat-card">
+                    <p class="stat-label">Speed</p>
+                    <p id="speedDisplay" class="stat-value">1.0x</p>
+                </article>
+
+            </section>
+
             <section class="grid gap-4 lg:grid-cols-[1fr_280px]">
                             
-                <section class="border border-slate-700 bg-slate-800">
+                <section id="panel" class="arcade-panel">
 
-                    <div class="border-b border-slate-700 p-3">
-                        <h2 class="font-bold uppercase tracking-wide">Game Window</h2>
+                    <div class="cabinet-header">
+                        <div>
+                            <h2 class="font-bold uppercase tracking-wide">Word Drop Window</h2>
+                            <p id="roundMessage" class="text-sm text-slate-400">Waiting to start...</p>
+                        </div>  
+                    </div>                   
+
+                    <div id="playField" class="play-field">
+                        <div id="wordLayer"></div>
+                        <div id="shieldLine">Shield Line</div>
                     </div>
 
-                    <div id="playField" class="h-[480px] bg-slate-950"></div>
+                    <div class="input-area">
+                        <input id="typeInput" type="text" placeholder="Type Here..."
+                        autocomplete="off" autocapitalize="off" spellcheck="false">
+
+                        <button id="overchargeButton" type="button">TAB</button>
+                    </div>
                 
                 </section>
 
                 <aside class="space-y-4">
 
-                    <section class="border border-slate-700 bg-slate-800 p-4">
-                        <h3 class="mb-2 font-bold uppercase">Stats</h3>
-                        <p class="text-sm text-slate-400">Score</p>
-                    </section>
-
-                    <section class="border border-slate-700 bg-slate-800 p-4">
+                    <section class="arcade-panel p-4">
                         
-                        <h3 class="mb-2 font-bold uppercase">Controls</h3>
-                        <ul class="space-y-1 text-sm text-slate-400">
+                        <h3 class="panel-title">Controls</h3>
+                        <ul class="panel-list">
                             
                             <li>Type words to clear them.</li>
                             <li>TAB will become the power key.</li>
@@ -49,9 +82,12 @@
 
                     </section>
 
-                    <section class="border border-slate-700 bg-slate-800 p-4">
-                        <h3 class="mb-2 font-bold uppercase">Events</h3>
-                        <p id="eventLog" class="text-sm text-slate-400">Lesss Go</p>
+                    <section class="arcade-panel p-4">
+                        <h3 class="panel-title">Events</h3>
+                        <ol id="eventLog" class="event-log">
+                            <li>Lesss Go</li>
+                            <li>Waiting for first run...</li>
+                        </ol>
                     </section>
 
                 </aside>

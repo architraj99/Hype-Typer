@@ -11,3 +11,142 @@ body {
 body{
     font-family: Arial, Helvetica, sans-serif;
 }
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.arcade-panel {
+    border: 2px solid #334155;
+    background: #1e293b;
+}
+
+.stat-card {
+    border: 2px solid #334155;
+    background: #1e293b;
+    padding: 14px 16px;
+}
+
+.stat-label {
+    margin: 0 0 6px;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    margin: 0;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.cabinet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid #334155;
+    background: #0f172a;
+    padding: 12px 14px;
+}
+
+.play-field {
+    position: relative;
+    height: 480px;
+    overflow: hidden;
+    border-bottom: 2px solid #334155;
+    background: #020617;
+}
+
+#wordLayer {
+    position: absolute;
+    inset: 0;
+}
+
+#shieldLine {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 48px;
+    z-index: 5;
+    border-top: 4px solid #be123c;
+    padding-top: 4px;
+    padding-right: 10px;
+    color: #e11d48;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-align: right;
+    text-transform: uppercase;
+}
+
+.input-area {
+    display: flex;
+    gap: 10px;
+    background: #1e293b;
+    padding: 12px;
+}
+
+#typeInput {
+    flex:1;
+    border: 2px solid #475569;
+    border-radius: 0;
+    background: #0f172a;
+    color: #ffffff;
+    padding: 12px;
+    outline: none;
+}
+
+#typeInput::placeholder {
+    color: #64748b;
+}
+
+#typeInput:focus {
+    border-color: #10b981;
+}
+
+#overchargeButton {
+    width: 90px;
+    border: 2px solid #475569;
+    border-radius: 0;
+    background: #334155;
+    color: #ffffff;
+    font-weight: 900;
+}
+
+#overchargeButton:active {
+    transform: translateY(2px);
+}
+
+.panel-title {
+    margin: 0 0 12px;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 8px;
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.panel-list {
+    margin: 0;
+    padding-left: 18px;
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.event-log {
+    margin: 0;
+    padding-left: 18px;
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.6;
+}
