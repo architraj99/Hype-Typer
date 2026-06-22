@@ -14,6 +14,28 @@ const roundMessage = document.querySelector("#roundMessage");
 const startOverlay = document.querySelector("#startOverlay");
 const startButton = document.querySelector("#startButton");
 
+const wordQueue = [
+    "arcade",
+    "button",
+    "player",
+    "ticket",
+    "cabinet",
+    "score",
+    "combo",
+    "timer",
+    "shield",
+    "typing",
+    "letter",
+    "screen",
+    "window",
+    "pixel",
+    "quarter",
+    "bonus",
+    "insert",
+    "credit",
+    "level",
+    "target"
+];
 
 const game = {
     running: false,
@@ -23,6 +45,9 @@ const game = {
     speed: 1,
     elapsedTime: 0,
     lastFrame: 0,
+    spawnTimer: 0,
+    spawnDelay: 1400,
+    wordId: 0,
     activeWords: []
 };
 
@@ -33,7 +58,12 @@ function resetState() {
     game.speed = 1;
     game.elapsedTime = 0;
     game.lastFrame = 0;
+    game.spawnTimer = 0;
+    game.spawnDelay = 1400;
+    game.wordId = 0;
     game.activeWords = [];
+
+    wordLayer.innerHTML ="";
 
     updateDashboard();
 }
@@ -89,14 +119,52 @@ function gameLoop(timestamp) {
 
 function update(delta) {
     game.elapsedTime += delta;
+    game.spawnTimer += delta;
+    
+    if(game.spawnTimer >= game.spawnDelay) {
+        game.spawnTimer = 0;
+        spawnWord();
+    }
 }
 
 function render() {
     updateDashboard();
 }
 
-startButton.addEventListener("click", startGame);
+function spawnWord() {
 
+    const text = pickWord();
+    const fieldWidth = playField.clientWidth;
+    const blockWidth = Math.max(80, text.length * 14 + 28);
+    const x = getSpawnX(fieldWidth, blockWidth);
+
+    const word = {
+        id: game.wordId,
+        text,
+        x,
+        y: -40,
+        speed: 45 + Math.random() * 18
+    };
+
+    game.wordId += 1;
+    game.activeWords.push(word);
+
+    addLog(`Spawned "${text}".`);
+}
+
+function pickWord() {
+
+    const index = Math.floor(Math.random() * wordQueue.length);
+    return wordQueue[index];
+}
+
+function getSpawnX(fieldWidth, blockWidth) {
+    const padding = 10;
+    const maxX = Math.max(padding, fieldWidth - blockWidth - padding);
+    return padding + Math.random() * (maxX - padding);
+}
+
+startButton.addEventListener("click", startGame);
 updateDashboard();
 addLog("System idle.");
 addLog("Engine ready.");
