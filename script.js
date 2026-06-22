@@ -91,7 +91,7 @@ function updateDashboard() {
 function addLog(message) {
 
     const item = document.createElement("li");
-    item.textContent = messasge;
+    item.textContent = message;
     eventLog.prepend(item);
 
     while(eventLog.children.length > 5) {
@@ -125,6 +125,7 @@ function update(delta) {
         game.spawnTimer = 0;
         spawnWord();
     }
+    moveWords(delta);
 }
 
 function render() {
@@ -138,18 +139,33 @@ function spawnWord() {
     const blockWidth = Math.max(80, text.length * 14 + 28);
     const x = getSpawnX(fieldWidth, blockWidth);
 
+    const element = document.createElement("div");
+    element.className = "word-block";
+    element.textContent = text;
+
+    wordLayer.appendChild(element);
+
     const word = {
         id: game.wordId,
         text,
         x,
         y: -40,
-        speed: 45 + Math.random() * 18
+        speed: 45 + Math.random() * 18, element
     };
 
     game.wordId += 1;
     game.activeWords.push(word);
 
     addLog(`Spawned "${text}".`);
+}
+
+function moveWords(delta) {
+
+    for(const word of game.activeWords) {
+
+        word.y += (word.speed * delta) / 1000;
+        word.element.style.transform = `translate(${word.x}px, ${word.y}px)`;
+    }
 }
 
 function pickWord() {
@@ -161,7 +177,7 @@ function pickWord() {
 function getSpawnX(fieldWidth, blockWidth) {
     const padding = 10;
     const maxX = Math.max(padding, fieldWidth - blockWidth - padding);
-    return padding + Math.random() * (maxX - padding);
+    return ( padding + Math.random() * (maxX - padding));
 }
 
 startButton.addEventListener("click", startGame);

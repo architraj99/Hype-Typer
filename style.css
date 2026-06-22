@@ -150,3 +150,21 @@ button {
     font-size: 14px;
     line-height: 1.6;
 }
+
+.word-block {
+
+    position: absolute;
+    min-width: 80px;
+
+    border: 2px solid #475569;
+    background: #1e293b;
+    color: #f8fafc;
+
+    padding: 6px 10px;
+    font-family: "Courier New", monospace;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    user-select: none;
+}
