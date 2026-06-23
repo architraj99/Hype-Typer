@@ -63,6 +63,8 @@ function resetState() {
     game.wordId = 0;
     game.activeWords = [];
 
+    typeInput.value = "";
+    typeInput.classList.remove("input-error");
     wordLayer.innerHTML ="";
 
     updateDashboard();
@@ -76,6 +78,7 @@ function startGame() {
     roundMessage.textContent = "Game Running";
 
     addLog("Round Started");
+    typeInput.focus();
     requestAnimationFrame(gameLoop);
 }
     
@@ -150,7 +153,8 @@ function spawnWord() {
         text,
         x,
         y: -40,
-        speed: 45 + Math.random() * 18, element
+        speed: 45 + Math.random() * 18, 
+        element
     };
 
     game.wordId += 1;
@@ -168,6 +172,77 @@ function moveWords(delta) {
     }
 }
 
+function handleTyping() {
+
+    if(!game.running) {
+        return;
+    }
+
+    const typed = typeInput.value.trim().toLowerCase();
+    typeInput.classList.toggle("input-error", typed.length > 0 && ! hasAnyPrefix(typed));
+    refreshWordHighlights();
+
+    if(!typed) {
+        return;
+    }
+    
+    const match = game.activeWords.find((word) => word.text === typed);
+
+    if(match) {
+        removeWord(match);
+        typeInput.value = "";
+        typeInput.classList.remove("input-error");
+        refreshWordHighlights();
+    }
+
+}
+
+function hasAnyPrefix(typed) {
+
+    return game.activeWords.some((word) => word.text.startsWith(typed));
+}
+
+function refreshWordHighlights() {
+
+    const typed = typeInput.value.trim().toLowerCase();
+
+    for(const word of game.activeWords) {
+
+        word.element.classList.toggle("targeted", typed.length > 0 && word.text.startsWith(typed));
+        word.element.innerHTML = renderTypedLetters(word.text, typed);
+    }
+}
+
+function renderTypedLetters(word, typed) {
+
+    let html = "";
+
+    for(let i=0; i<word.length; i+=1) {
+        const letter = word[i];
+
+        if(i < typed.length && typed[i] === letter) {
+            html += `<span class="correct-letter">${letter}</span>`;
+        }
+        
+        else if(i<typed.length) {
+            html += `<span class="wrong-letter">${letter}</span>`;
+        }
+
+        else{
+            html += letter;
+        }
+    }
+    return html;
+}
+
+function removeWord(word) {
+
+    word.element.remove();
+    game.activeWords = game.activeWords.filter((item) => item.id !== word.id);
+
+    addLog(`Cleared "${word.text}".`);
+}
+
 function pickWord() {
 
     const index = Math.floor(Math.random() * wordQueue.length);
@@ -181,6 +256,7 @@ function getSpawnX(fieldWidth, blockWidth) {
 }
 
 startButton.addEventListener("click", startGame);
+typeInput.addEventListener("input", handleTyping);
 updateDashboard();
 addLog("System idle.");
 addLog("Engine ready.");
