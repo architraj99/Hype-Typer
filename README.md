@@ -30,4 +30,6 @@ Break your streak by letting a word through.
 
 click the TAB button to instantly clear all active words. Awards 50 points per word removed. Goes on a  10 second cooldown after use.
 
+<img width="802" height="413" alt="image" src="https://github.com/user-attachments/assets/e078da89-4a54-452e-bafc-c38d973953a3" />
+
 
