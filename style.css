@@ -4,11 +4,11 @@ body {
     padding: 0;
 }
 
-*{
+* {
     box-sizing: border-box;
 }
 
-body{
+body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -96,7 +96,7 @@ button {
 }
 
 #typeInput {
-    flex:1;
+    flex: 1;
     border: 2px solid #475569;
     border-radius: 0;
     background: #0f172a;
@@ -128,6 +128,12 @@ button {
 
 #overchargeButton:active {
     transform: translateY(2px);
+}
+
+#overchargeButton:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .panel-title {
@@ -162,10 +168,11 @@ button {
     align-items: center;
     justify-content: center;
     background: rgba(2, 6, 23, 0.92);
+    z-index: 10;
 }
 
 .overlay.hidden {
-    display:none;
+    display: none;
 }
 
 .overlay-panel {
@@ -204,7 +211,7 @@ button {
     border: 2px solid #475569;
     background: #1e293b;
     color: #f8fafc;
-
+    
     padding: 6px 10px;
     font-family: "Courier New", monospace;
     font-size: 16px;

@@ -14,7 +14,14 @@ const roundMessage = document.querySelector("#roundMessage");
 const startOverlay = document.querySelector("#startOverlay");
 const startButton = document.querySelector("#startButton");
 
+const gameOverOverlay = document.querySelector("#gameOverOverlay");
+const restartButton = document.querySelector("#restartButton");
+const finalScoreEl = document.querySelector("#finalScore");
+const overchargeButton = document.querySelector("#overchargeButton");
+
 const wordQueue = [
+    "hackclub",
+    "macondo",
     "arcade",
     "button",
     "player",
@@ -51,6 +58,11 @@ const game = {
     activeWords: []
 };
 
+const overcharge = {
+    cooldown: false,
+    cooldownMs: 10000
+};
+
 function resetState() {
     game.score = 0;
     game.shield = 100;
@@ -67,6 +79,10 @@ function resetState() {
     typeInput.classList.remove("input-error");
     wordLayer.innerHTML ="";
 
+    overcharge.cooldown = false;
+    overchargeButton.disabled = false;
+    overchargeButton.textContent = "TAB";
+
     updateDashboard();
 }
 
@@ -75,6 +91,7 @@ function startGame() {
     resetState();
     game.running = true;
     startOverlay.classList.add("hidden");
+    gameOverOverlay.classList.add("hidden");
     roundMessage.textContent = "Game Running";
 
     addLog("Round Started");
@@ -82,6 +99,16 @@ function startGame() {
     requestAnimationFrame(gameLoop);
 }
     
+function endGame() {
+
+    game.running = false;
+    roundMessage.textContent = "Game Over";
+    finalScoreEl.textContent = `Score: ${game.score}`;
+
+    gameOverOverlay.classList.remove("hidden");
+    addLog("Shield destroyed. Game Over.");
+}
+
 function updateDashboard() {
 
     scoreDisplay.textContent = game.score;
@@ -129,6 +156,7 @@ function update(delta) {
         spawnWord();
     }
     moveWords(delta);
+    checkShieldLine();
 }
 
 function render() {
@@ -169,6 +197,27 @@ function moveWords(delta) {
 
         word.y += (word.speed * delta) / 1000;
         word.element.style.transform = `translate(${word.x}px, ${word.y}px)`;
+    }
+}
+
+function checkShieldLine() {
+
+    const shieldY = playField.clientHeight - 52;
+    const breached = game.activeWords.filter((word) => word.y >= shieldY);
+
+    for(const word of breached) {
+
+        word.element.remove();
+        game.shield = Math.max(0, game.shield - 20);
+        game.streak = 0;
+
+        addLog(`"${word.text}" hit the shield! - 20`);
+    }
+    
+    game.activeWords = game.activeWords.filter((word) => word.y < shieldY);
+
+    if(game.shield <= 0) {
+        endGame();
     }
 }
 
@@ -240,7 +289,19 @@ function removeWord(word) {
     word.element.remove();
     game.activeWords = game.activeWords.filter((item) => item.id !== word.id);
 
+    game.streak += 1;
+    game.score += 100 + game.streak * 10;
+
+    if(game.streak % 5 === 0) {
+
+        game.speed = Math.min(3.0, parseFloat((game.speed + 0.2).toFixed(1)));
+        game.spawnDelay = Math.max(600, game.spawnDelay - 100);
+        addLog(`Speed up! ${game.speed.toFixed(1)}x`);
+        addLog(`Cleared "${word.text}". +${ 100 + game.streak * 10}`);
+    }
+
     addLog(`Cleared "${word.text}".`);
+
 }
 
 function pickWord() {
@@ -252,11 +313,69 @@ function pickWord() {
 function getSpawnX(fieldWidth, blockWidth) {
     const padding = 10;
     const maxX = Math.max(padding, fieldWidth - blockWidth - padding);
-    return ( padding + Math.random() * (maxX - padding));
+    return padding + Math.random() * (maxX - padding);
+}
+
+function triggerOvercharge() {
+
+    if(!game.running || overcharge.cooldown) {
+        return;
+    }
+
+    const count = game.activeWords.length;
+
+    if(count === 0) {
+        return;
+    }
+
+    for(const word of game.activeWords){
+        word.element.remove();
+    }
+
+    game.activeWords = [];
+    game.score += count * 50;
+
+    addLog(`Overcharge! Cleared ${count}words. +${count * 50}`);
+
+    overcharge.cooldown = true;
+    overchargeButton.disabled = true;
+    let remaining = Math.ceil(overcharge.cooldownMs / 1000);
+
+    overchargeButton.textContent = `${remaining}s`;
+    const tick = setInterval(() => {
+        remaining -=1;
+
+        if(remaining <= 0) {
+            clearInterval(tick);
+            overcharge.cooldown = false;
+            overchargeButton.disabled = false;
+            overchargeButton.textContent = "TAB";
+
+            addLog("Overcharge ready.");
+        }
+
+        else {
+            overchargeButton.textContent = `${remaining}s`;
+        }
+    }, 1000);
+
 }
 
 startButton.addEventListener("click", startGame);
+restartButton.addEventListener("click", startGame);
+
 typeInput.addEventListener("input", handleTyping);
+
+document.addEventListener("keydown", (e) =>{
+
+    if(e.key === "Tab") {
+        e.preventDefault();
+        triggerOvercharge();
+    }
+});
+
+overchargeButton.addEventListener("click", triggerOvercharge);
+
 updateDashboard();
 addLog("System idle.");
 addLog("Engine ready.");
